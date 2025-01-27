@@ -1,4 +1,0 @@
-{
-  "using": "xpath",
-  "value": "//ul[contains(@class,'uiList localeSelectorList')]//li//a"
-}
