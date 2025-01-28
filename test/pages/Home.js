@@ -4,10 +4,17 @@ class Home{
         return browser.url("/");
     }
 
-    async  GetTitle(){
-        return await browser.$("//a[@class='flex items-center']//span[1]"); 
+    async GetTitle() {
+        try {
+            const titleElement = await browser.$("//a[@class='flex items-center']//span[1]");
+            // Let's verify the element exists
+            await titleElement.waitForExist({ timeout: 5000 });
+            return titleElement;
+        } catch (error) {
+            console.log('Error in GetTitle:', error);
+            throw error;
+        }
     }
-
     async GetNavbar() {
         return await browser.$$("//a[contains(@class, 'block') or contains(@class, 'text-base')]");
     }
@@ -28,6 +35,6 @@ class Home{
         return await browser.$("(//button[@type='submit'])[2]");
     }
     async submitEmail(email) {
-        await await this.inputEmail.addValue(email);}
+         await this.inputEmail.addValue(email);}
 }
 export default new Home();

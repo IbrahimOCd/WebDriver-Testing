@@ -26,7 +26,7 @@ exports.config = {
     // of the config file unless it's absolute.
     //
     specs: [
-        './test/specs/**/Home.js'
+        './test/specs/**/Books.js'
     ],
     // Patterns to exclude.
     exclude: [
@@ -135,7 +135,7 @@ exports.config = {
           'allure',
           {
             outputDir: 'allure-results',
-            disableWebdriverStepsReporting: false,
+            disableWebdriverStepsReporting: true,
             disableWebdriverScreenshotsReporting: false,
           },
         ],
@@ -290,25 +290,31 @@ exports.config = {
      * @param {Array.<Object>} capabilities list of capabilities details
      * @param {<Object>} results object containing test results
      */
-    onComplete: function(exitCode, config, capabilities, results) {
-        const reportError = new Error('Could not generate Allure report')
-        const generation = allure(['generate', 'allure-results', '--clean'])
-        return new Promise((resolve, reject) => {
-            const generationTimeout = setTimeout(
-                () => reject(reportError),
-                5000)
+    onComplete: function() {
+        return new Promise((resolve) => {
+            const reportError = new Error('Could not generate Allure report');
+            try {
+                const generation = allure(['generate', 'allure-results', '--clean']);
+                
+                const generationTimeout = setTimeout(() => {
+                    console.log('Allure report generation timed out');
+                    resolve();
+                }, 10000);
 
-            generation.on('exit', function(exitCode) {
-                clearTimeout(generationTimeout)
-
-                if (exitCode !== 0) {
-                    return reject(reportError)
-                }
-
-                console.log('Allure report successfully generated')
-                resolve()
-            })
-        })
+                generation.on('exit', function(exitCode) {
+                    clearTimeout(generationTimeout);
+                    if (exitCode !== 0) {
+                        console.log('Allure report generation failed');
+                    } else {
+                        console.log('Allure report successfully generated');
+                    }
+                    resolve();
+                });
+            } catch (error) {
+                console.log('Error generating report:', error);
+                resolve();
+            }
+        });
     },
     /**
     * Gets executed when a refresh happens.

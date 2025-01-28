@@ -10,10 +10,21 @@ import Home from "../pages/Home";
 
     
     it('Getting Title Then Check it', async () => {
-        const Title = await Home.GetTitle(); 
-        const titleText = await Title.getText(); 
-        console.log("The Title is:", titleText);
-        await expect(titleText).toEqual("LibraryStore");
+        try {
+            const titleElement = await Home.GetTitle();
+            console.log('Title element type:', typeof titleElement);
+            console.log('Title element:', titleElement);
+            
+            // Add explicit wait
+            await browser.pause(1000);
+            
+            const titleText = await titleElement.getText();
+            console.log("The Title is:", titleText);
+            await expect(titleText).toEqual("LibraryStore");
+        } catch (error) {
+            console.log('Error in test:', error);
+            throw error;
+        }
     });
 
     it('Get the text of all menu items & assert them', async () => {
@@ -53,7 +64,7 @@ import Home from "../pages/Home";
         await exploreButton.click();
         
         const currentUrl = await browser.getUrl();
-        expect(currentUrl).toContain('books'); 
+        await expect(currentUrl).toContain('books'); 
     });
     
 
