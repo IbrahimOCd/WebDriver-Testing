@@ -1,6 +1,6 @@
 import Books from "../pages/Books";
 import BooksJson from "../data/Books.json"
-const allure = require('allure-commandline')
+import allure from 'allure-commandline';
 
 describe('Books', () => {
 
