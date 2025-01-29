@@ -1,5 +1,6 @@
 import Books from "../pages/Books";
 import BooksJson from "../data/Books.json"
+const allure = require('allure-commandline')
 
 describe('Books', () => {
 
@@ -40,21 +41,36 @@ describe('Books', () => {
 
         const isNumberInputAvailable = await SubmitNumberOfDays.isExisting();
 
-       if (!isNumberInputAvailable) {
-        console.log(`Book "${bookName}" is off loan. Skipping to next book.`);
-        await Books.GotoBook(); 
-        continue;
-    }
+        if (!isNumberInputAvailable) {
+            console.log(`Book "${bookName}" is off loan. Skipping to next book.`);
+            const screenshotPath = `./screenshots/${bookName}_off_loan.png`;
+            await browser.saveScreenshot(screenshotPath);  // Save the screenshot
+        
+            // Attach the screenshot to Allure report
+            const fs = require('fs');
+            const screenshotData = fs.readFileSync(screenshotPath);  // Read screenshot file
+            if (typeof allure !== 'undefined' && typeof allure.addAttachment === 'function') {
+                allure.addAttachment(`Off Loan Screenshot for ${bookName}`, screenshotData, 'image/png');
+            } else {
+                console.error('Allure not configured correctly for attachment.');
+            }
+        
+            await Books.GotoBook(); 
+            continue;
+        }
         await Books.SubmitNumberOfDays(2);
         const Confirm= await Books.ConfirmRent();
         await Confirm.click();
         rentedBooksCount++;
-
-        const NumberOnCart= await Books.NumberOnCart();
-        await expect(NumberOnCart).toEqual(`(${rentedBooksCount})`);
         await Books.ClickOnCart();
         const NameBook = await Books.CheckTheBook(bookName);
-        await expect(NameBook).toEqual(bookName);
+        await NameBook.waitForDisplayed({timeout: 5000 });
+        const Name= await NameBook.getText();
+        await expect(Name).toEqual(bookName);
+        const NumberOnCart= await Books.NumberOnCart();
+        await NumberOnCart.waitForDisplayed({timeout: 5000 });
+        const Number =await  NumberOnCart.getText();
+        await expect(Number).toEqual(`(${rentedBooksCount})`);
         await Books.GotoBook(); 
      } catch (error) {
         console.error(`Error processing book: ${bookName}`, error);

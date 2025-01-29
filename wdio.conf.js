@@ -135,7 +135,7 @@ exports.config = {
           'allure',
           {
             outputDir: 'allure-results',
-            disableWebdriverStepsReporting: true,
+            disableWebdriverStepsReporting: false,
             disableWebdriverScreenshotsReporting: false,
           },
         ],
@@ -246,6 +246,7 @@ exports.config = {
     afterTest: async function(test, context, { error, result, duration, passed, retries }) {
         if (error) {
           await  browser.takeScreenshot();
+          allure.addAttachment('Failure Screenshot', Buffer.from(screenshot, 'base64'), 'image/png');
         }
     },
 

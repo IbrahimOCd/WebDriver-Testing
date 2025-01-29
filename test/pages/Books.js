@@ -42,13 +42,13 @@ class Books{
         return await browser.$("(//button[@type='submit'])[2]");
     }
     async NumberOnCart(){
-        return await browser.$("//a[contains(@class,'flex text-white')]//span[1]").getText();
+        return await browser.$("//a[contains(@class,'flex text-white')]//span[1]");
     }
     async ClickOnCart(){
         return await browser.$("//a[contains(@class,'flex text-white')]").click();
     }
     async CheckTheBook(bookName){
-        return await browser.$(`//p[text()='   ${bookName} ']`).getText();
+        return await browser.$(`//p[text()='   ${bookName} ']`);
     }
     async Checkout(){
         return await browser.$("//div[@class='ml-4']//a[1]");
