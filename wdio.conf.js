@@ -1,6 +1,5 @@
-import allure from '@wdio/allure-reporter';
-import { exec } from 'child_process';
-
+const allure = require('@wdio/allure-reporter');
+const { exec } = require('child_process');
 
 exports.config = {
 
