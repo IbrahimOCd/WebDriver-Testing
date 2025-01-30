@@ -1,4 +1,5 @@
 const allure = require('@wdio/allure-reporter').default;
+const { exec } = require('child_process');
 
 exports.config = {
 
@@ -292,32 +293,23 @@ exports.config = {
      * @param {Array.<Object>} capabilities list of capabilities details
      * @param {<Object>} results object containing test results
      */
+
     onComplete: function() {
         return new Promise((resolve) => {
-            const reportError = new Error('Could not generate Allure report');
-            try {
-                const generation = allure(['generate', 'allure-results', '--clean']);
-                
-                const generationTimeout = setTimeout(() => {
-                    console.log('Allure report generation timed out');
+            console.log('Generating Allure report...');
+            exec('npx allure generate allure-results --clean -o allure-report', (error, stdout, stderr) => {
+                if (error) {
+                    console.error('Error generating Allure report:', error);
                     resolve();
-                }, 10000);
-
-                generation.on('exit', function(exitCode) {
-                    clearTimeout(generationTimeout);
-                    if (exitCode !== 0) {
-                        console.log('Allure report generation failed');
-                    } else {
-                        console.log('Allure report successfully generated');
-                    }
-                    resolve();
-                });
-            } catch (error) {
-                console.log('Error generating report:', error);
+                } else {
+                    console.log('Allure report successfully generated');
+                    console.log(stdout);
+                }
                 resolve();
-            }
+            });
         });
     },
+    
     /**
     * Gets executed when a refresh happens.
     * @param {string} oldSessionId session ID of the old session
