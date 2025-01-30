@@ -1,7 +1,5 @@
 import Books from "../pages/Books";
-import BooksJson from "../data/Books.json"
-const allure = import('allure-commandline')
-const fs = require('fs');
+import BooksJson from "../data/Books.json";
 
 describe('Books', () => {
 
@@ -44,17 +42,6 @@ describe('Books', () => {
 
         if (!isNumberInputAvailable) {
             console.log(`Book "${bookName}" is off loan. Skipping to next book.`);
-            const screenshotPath = `./screenshots/${bookName}_off_loan.png`;
-            await browser.saveScreenshot(screenshotPath);  // Save the screenshot
-        
-            // Attach the screenshot to Allure report
-            const screenshotData = fs.readFileSync(screenshotPath);  // Read screenshot file
-            if (typeof allure !== 'undefined' && typeof allure.addAttachment === 'function') {
-                allure.addAttachment(`Off Loan Screenshot for ${bookName}`, screenshotData, 'image/png');
-            } else {
-                console.error('Allure not configured correctly for attachment.');
-            }
-        
             await Books.GotoBook(); 
             continue;
         }
