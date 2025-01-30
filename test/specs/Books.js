@@ -1,6 +1,7 @@
 import Books from "../pages/Books";
 import BooksJson from "../data/Books.json"
 const allure = import('allure-commandline')
+const fs = require('fs');
 
 describe('Books', () => {
 
@@ -47,7 +48,6 @@ describe('Books', () => {
             await browser.saveScreenshot(screenshotPath);  // Save the screenshot
         
             // Attach the screenshot to Allure report
-            const fs = require('fs');
             const screenshotData = fs.readFileSync(screenshotPath);  // Read screenshot file
             if (typeof allure !== 'undefined' && typeof allure.addAttachment === 'function') {
                 allure.addAttachment(`Off Loan Screenshot for ${bookName}`, screenshotData, 'image/png');
