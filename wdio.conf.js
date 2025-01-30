@@ -1,3 +1,4 @@
+require('@babel/register');
 const allure = require('@wdio/allure-reporter');
 const { exec } = require('child_process');
 

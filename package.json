@@ -15,8 +15,8 @@
   },
   "devDependencies": {
     "@babel/cli": "^7.26.4",
-    "@babel/core": "^7.26.0",
-    "@babel/preset-env": "^7.26.0",
+    "@babel/core": "^7.26.7",
+    "@babel/preset-env": "^7.26.7",
     "@babel/register": "^7.25.9",
     "@wdio/allure-reporter": "^9.6.3",
     "@wdio/browserstack-service": "^9.6.1",
