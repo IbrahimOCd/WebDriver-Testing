@@ -247,8 +247,9 @@ exports.config = {
      */
     afterTest: async function(test, context, { error, result, duration, passed, retries }) {
         if (error) {
-            const screenshot = await browser.takeScreenshot();
-            await allure.addAttachment('Failure Screenshot', Buffer.from(screenshot, 'base64'), 'image/png');
+          await  browser.takeScreenshot();
+          allure.addAttachment('Failure Screenshot', Buffer.from(screenshot, 'base64'), 'image/png');
+
         }
     },
 
