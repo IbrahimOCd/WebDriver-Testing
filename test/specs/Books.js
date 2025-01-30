@@ -1,7 +1,7 @@
 import Books from "../pages/Books";
-import BooksJson from "../data/Books.json";
-const allure = require("allure-commandline").default;
-const fs = require("fs");
+import BooksJson from "../data/Books.json" assert { type: "json" };
+import allure from "allure-commandline";
+import { promises as fs } from "fs";
 
 describe("Books", () => {
   beforeEach(async () => {

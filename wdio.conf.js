@@ -1,5 +1,6 @@
-const allure = require('@wdio/allure-reporter').default;
-const { exec } = require('child_process');
+import allure from '@wdio/allure-reporter';
+import { exec } from 'child_process';
+
 
 exports.config = {
 
@@ -246,9 +247,8 @@ exports.config = {
      */
     afterTest: async function(test, context, { error, result, duration, passed, retries }) {
         if (error) {
-          await  browser.takeScreenshot();
-          allure.addAttachment('Failure Screenshot', Buffer.from(screenshot, 'base64'), 'image/png');
-
+            const screenshot = await browser.takeScreenshot();
+            await allure.addAttachment('Failure Screenshot', Buffer.from(screenshot, 'base64'), 'image/png');
         }
     },
 
